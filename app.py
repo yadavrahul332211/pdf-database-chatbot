@@ -18,13 +18,16 @@ st.title("🤖 PDF Database Chatbot")
 # LOAD PDF PATHS FROM DATABASE
 # -------------------------
 @st.cache_data
+import os
+
 def load_pdf_paths():
-    conn = sqlite3.connect("database.db")
-    cursor = conn.cursor()
-    cursor.execute("SELECT pdf_path FROM pdf_files")
-    paths = [row[0] for row in cursor.fetchall()]
-    conn.close()
-    return paths
+    pdf_dir = "pdfs"
+    return [
+        os.path.join(pdf_dir, f)
+        for f in os.listdir(pdf_dir)
+        if f.endswith(".pdf")
+    ]
+
 
 
 # -------------------------
