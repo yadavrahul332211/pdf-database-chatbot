@@ -1,5 +1,6 @@
-import streamlit as st
+import os
 import sqlite3
+import streamlit as st
 from pypdf import PdfReader
 
 from langchain_text_splitters import CharacterTextSplitter
@@ -15,11 +16,8 @@ st.title("🤖 PDF Database Chatbot")
 
 
 # -------------------------
-# LOAD PDF PATHS FROM DATABASE
+# LOAD PDF PATHS (CLOUD SAFE)
 # -------------------------
-@st.cache_data
-import os
-
 def load_pdf_paths():
     pdf_dir = "pdfs"
     return [
@@ -29,15 +27,14 @@ def load_pdf_paths():
     ]
 
 
-
 # -------------------------
-# READ PDF TEXT
+# READ PDF
 # -------------------------
 def read_pdf(path):
     reader = PdfReader(path)
     text = ""
     for page in reader.pages:
-        text += page.extract_text()
+        text += page.extract_text() or ""
     return text
 
 
@@ -94,4 +91,3 @@ if st.button("Ask"):
         st.write(response)
     else:
         st.warning("Please question likho")
-
